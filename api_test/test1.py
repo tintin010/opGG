@@ -94,7 +94,7 @@ def get_summoner_tier(api_key, summoner_id):
 
     return tier
 
-def get_match_ids(api_key, puuid, start=0, count=20, region):
+def get_match_ids(api_key, puuid, region, start=0, count=10):
     # Generate URL
     url = f"https://{region.lower()}.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start={start}&count={count}&api_key={api_key}"
 
@@ -142,8 +142,9 @@ def winningCheck(api_key, puuid, gameId):
             
 
 def calculate_win_rate(api_key, puuid, region):
-    # 최근 20경기의 매치 ID를 가져옴
-    match_ids = get_match_ids(api_key, puuid, 0, 20, region)
+    # 최근 10경기의 매치 ID를 가져옴
+    match_ids = get_match_ids(api_key, puuid,region, 0, 10)
+    print(len(match_ids))
     if not match_ids:
         print("No match IDs found.")
         return None
@@ -152,7 +153,7 @@ def calculate_win_rate(api_key, puuid, region):
     total_matches = len(match_ids)
 
     for match_id in match_ids:
-        win_status = winningCheck(api_key, puuid, match_id, region)
+        win_status = winningCheck(api_key, puuid, match_id)
         if win_status:
             win_count += 1
 
@@ -172,7 +173,6 @@ def get_summoner_info(api_key, summonerName, summonerTag, region):
     summoner_tier = get_summoner_tier(api_key, summoner_id)
 
     # Use the PUUID to get the 10 match ID
-    # match_ids = get_match_ids(api_key, summoner_puuid, 0, 20, region)
     win_rate = calculate_win_rate(api_key, summoner_puuid, region)
 
     #Use the PUUID to check Win
@@ -180,7 +180,7 @@ def get_summoner_info(api_key, summonerName, summonerTag, region):
     # print("winning : ", winning)
 
     print(f"The tier of the summoner {summonerName} is {summoner_tier}.")
-    print("승률은 : {win_rate}")
+    print(f"승률은 : {win_rate}")
         
     #     return summoner_tier
     # except Exception as e:
@@ -190,7 +190,7 @@ def get_summoner_info(api_key, summonerName, summonerTag, region):
 
 
 # Example usage
-api_key = "RGAPI-6cb9b98d-2b0b-4dee-86e6-40826f465760"
+api_key = "RGAPI-95a2a8fc-b1ea-41d8-b6a7-9035971f0171"
 summonerName = "이순신의동기부여"
 summonerTag = "KR1"
 region = "ASIA"

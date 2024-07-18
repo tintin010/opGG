@@ -94,7 +94,7 @@ def get_summoner_tier(api_key, summoner_id):
 
     return tier
 
-def get_match_ids(api_key, puuid, start=0, count=20, region):
+def get_match_ids(api_key, puuid,region, start=0, count=20):
     # Generate URL
     url = f"https://{region.lower()}.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start={start}&count={count}&api_key={api_key}"
 
